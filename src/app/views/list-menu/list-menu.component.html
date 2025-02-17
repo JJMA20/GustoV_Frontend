@@ -1,1 +1,52 @@
-<p>list-menu works!</p>
+<div class="container">
+  <div class="row mb-3">
+    <div class="col">
+      <button class="btn btn-primary" (click)="openRegisterModal()">
+        Agregar Nueva Comida
+      </button>
+    </div>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let comida of comidas">
+        <td>{{ comida.id }}</td>
+        <td>{{ comida.nombre }}</td>
+        <td>{{ comida.tipo }}</td>
+        <td>{{ comida.descripcion }}</td>
+        <td>
+          <button class="btn btn-sm btn-info me-2" (click)="editComida(comida)">
+            Editar
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="deleteComida(comida.id)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <nav>
+    <ul class="pagination">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="changePage(currentPage - 1)">Anterior</a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === i + 1">
+        <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="changePage(currentPage + 1)">Siguiente</a>
+      </li>
+    </ul>
+  </nav>
+</div>

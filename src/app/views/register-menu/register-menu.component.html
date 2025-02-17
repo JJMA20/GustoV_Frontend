@@ -1,1 +1,35 @@
-<p>register-menu works!</p>
+<div class="modal-header">
+  <h4 class="modal-title">{{ editMode ? 'Editar' : 'Registrar' }} Comida</h4>
+  <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="menuForm">
+    <div class="mb-3">
+      <label class="form-label">Nombre</label>
+      <input type="text" class="form-control" formControlName="nombre">
+      <div class="invalid-feedback" *ngIf="menuForm.get('nombre')?.invalid && menuForm.get('nombre')?.touched">
+        El nombre es requerido
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Tipo</label>
+      <input type="text" class="form-control" formControlName="tipo">
+      <div class="invalid-feedback" *ngIf="menuForm.get('tipo')?.invalid && menuForm.get('tipo')?.touched">
+        El tipo es requerido
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <textarea class="form-control" formControlName="descripcion"></textarea>
+      <div class="invalid-feedback" *ngIf="menuForm.get('descripcion')?.invalid && menuForm.get('descripcion')?.touched">
+        La descripción es requerida
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancelar</button>
+  <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!menuForm.valid">
+    {{ editMode ? 'Actualizar' : 'Guardar' }}
+  </button>
+</div>
