@@ -12,16 +12,16 @@
       <tr>
         <th>ID</th>
         <th>Nombre</th>
-        <th>Tipo</th>
+        <th>Precio</th>
         <th>Descripción</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let comida of comidas">
+      <tr *ngFor="let comida of paginatedComidas">
         <td>{{ comida.id }}</td>
         <td>{{ comida.nombre }}</td>
-        <td>{{ comida.tipo }}</td>
+        <td>{{ comida.precio }}</td>
         <td>{{ comida.descripcion }}</td>
         <td>
           <button class="btn btn-sm btn-info me-2" (click)="editComida(comida)">

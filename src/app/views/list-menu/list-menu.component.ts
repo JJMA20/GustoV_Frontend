@@ -1,44 +1,56 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit} from '@angular/core';
-import { NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit } from '@angular/core';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterMenuComponent } from '../register-menu/register-menu.component';
+import { MenuService } from '../../core/services/menu.service';
 
 @Component({
   selector: 'app-list-menu',
-  imports: [CommonModule, NgbModule],
+  standalone: true,
+  imports: [CommonModule, NgbModule], // Agregar HttpClientModule aquí
   templateUrl: './list-menu.component.html',
-  styleUrl: './list-menu.component.css'
+  styleUrls: ['./list-menu.component.css']
 })
 export default class ListMenuComponent implements OnInit {
-  
-  comidas = [
-    { id: 1, nombre: 'Ensalada', tipo: 'Vegetariana', descripcion: 'Ensalada fresca' },
-    { id: 2, nombre: 'Pizza', tipo: 'Rápida', descripcion: 'Pizza de pepperoni' },
-    { id: 3, nombre: 'Sopa', tipo: 'Caliente', descripcion: 'Sopa de pollo' },
-    { id: 4, nombre: 'Tacos', tipo: 'Mexicana', descripcion: 'Tacos al pastor' },
-    { id: 5, nombre: 'Pasta', tipo: 'Italiana', descripcion: 'Pasta con salsa de tomate' },
-  ];
-  
-  currentPage = 1;
-  pageSize = 5;
-  totalPages = Math.ceil(this.comidas.length / this.pageSize);
-  
-  constructor(private modalService: NgbModal) {}
+
+  comidas: any[] = []; // Lista completa de comidas obtenidas del servicio
+  currentPage = 1; // Página actual
+  pageSize = 5; // Número de elementos por página
+  totalPages = 0; // Número total de páginas
+  paginatedComidas: any[] = []; // Lista de comidas para la página actual
+
+  constructor(
+    private modalService: NgbModal, 
+    private menuService: MenuService
+  ) {}
 
   ngOnInit(): void {
-    this.updatePage();
+    this.loadMenus(); // Cargar los menús al inicio
+  }
+
+  loadMenus() {
+    this.menuService.obtenerMenus().subscribe(menus => {
+      this.comidas = menus; // Guardar la lista completa de comidas
+      this.totalPages = Math.ceil(this.comidas.length / this.pageSize); // Calcular el total de páginas
+      this.updatePage(); // Actualizar la página actual con la lista correcta
+    }, error => {
+      console.error('Error al obtener los menús', error);
+    });
   }
 
   updatePage() {
+    // Calcular los índices de inicio y fin para la página actual
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    this.comidas = this.comidas.slice(startIndex, endIndex);
+    // Obtener las comidas de la página actual
+    this.paginatedComidas = this.comidas.slice(startIndex, endIndex);
   }
 
   changePage(page: number) {
+    // Asegurarse de que la página esté dentro del rango válido
     if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page;
-    this.updatePage();
+    this.currentPage = page; // Establecer la página actual
+    this.updatePage(); // Actualizar los datos para la página actual
   }
 
   editComida(comida: any) {
@@ -48,20 +60,25 @@ export default class ListMenuComponent implements OnInit {
     });
     modalRef.componentInstance.editMode = true;
     modalRef.componentInstance.comidaData = comida;
-    
+
     modalRef.result.then((result) => {
       if (result) {
-        this.updatePage();
+        this.loadMenus(); // Recargar los menús al guardar cambios
       }
-    }, (reason) => {
-      console.log('Modal cerrado');
-    });
+    }, () => console.log('Modal cerrado'));
   }
 
   deleteComida(id: number) {
     if (confirm('¿Estás seguro de que deseas eliminar esta comida?')) {
-      this.comidas = this.comidas.filter(comida => comida.id !== id);
-      this.updatePage();
+      this.menuService.eliminarMenu(id).subscribe(
+        () => {
+          console.log('Menú eliminado exitosamente');
+          this.loadMenus(); // Recargar la lista
+        },
+        error => {
+          console.error('Error al eliminar el menú', error);
+        }
+      );
     }
   }
 
@@ -70,14 +87,11 @@ export default class ListMenuComponent implements OnInit {
       size: 'md',
       backdrop: 'static'
     });
-    
+
     modalRef.result.then((result) => {
       if (result) {
-        this.comidas.push(result);
-        this.updatePage();
+        this.loadMenus(); // Recargar los menús al registrar uno nuevo
       }
-    }, (reason) => {
-      console.log('Modal cerrado');
-    });
+    }, () => console.log('Modal cerrado'));
   }
 }

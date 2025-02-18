@@ -11,7 +11,7 @@ export const routes: Routes = [
                 loadComponent: () => import('./views/dashboard/dashboard.component'),
             },
             {
-                path: 'menu',
+                path: 'platos',
                 loadComponent: () => import('./views/list-menu/list-menu.component'),
             },
             {

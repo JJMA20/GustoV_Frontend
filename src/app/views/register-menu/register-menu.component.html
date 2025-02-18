@@ -1,35 +1,56 @@
 <div class="modal-header">
-  <h4 class="modal-title">{{ editMode ? 'Editar' : 'Registrar' }} Comida</h4>
-  <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+  <h4 class="modal-title">{{ editMode ? 'Editar' : 'Registrar' }} Menú</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
 </div>
+
 <div class="modal-body">
   <form [formGroup]="menuForm">
     <div class="mb-3">
-      <label class="form-label">Nombre</label>
-      <input type="text" class="form-control" formControlName="nombre">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="nombre" 
+        formControlName="nombre"
+        [ngClass]="{'is-invalid': menuForm.get('nombre')?.invalid && menuForm.get('nombre')?.touched}"
+      >
       <div class="invalid-feedback" *ngIf="menuForm.get('nombre')?.invalid && menuForm.get('nombre')?.touched">
         El nombre es requerido
       </div>
     </div>
+
     <div class="mb-3">
-      <label class="form-label">Tipo</label>
-      <input type="text" class="form-control" formControlName="tipo">
-      <div class="invalid-feedback" *ngIf="menuForm.get('tipo')?.invalid && menuForm.get('tipo')?.touched">
-        El tipo es requerido
+      <label for="precio" class="form-label">Precio</label>
+      <input 
+        type="number" 
+        class="form-control" 
+        id="precio" 
+        formControlName="precio"
+        [ngClass]="{'is-invalid': menuForm.get('precio')?.invalid && menuForm.get('precio')?.touched}"
+      >
+      <div class="invalid-feedback" *ngIf="menuForm.get('precio')?.invalid && menuForm.get('precio')?.touched">
+        El precio es requerido
       </div>
     </div>
+
     <div class="mb-3">
-      <label class="form-label">Descripción</label>
-      <textarea class="form-control" formControlName="descripcion"></textarea>
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea 
+        class="form-control" 
+        id="descripcion" 
+        formControlName="descripcion"
+        [ngClass]="{'is-invalid': menuForm.get('descripcion')?.invalid && menuForm.get('descripcion')?.touched}"
+      ></textarea>
       <div class="invalid-feedback" *ngIf="menuForm.get('descripcion')?.invalid && menuForm.get('descripcion')?.touched">
         La descripción es requerida
       </div>
     </div>
   </form>
 </div>
+
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancelar</button>
-  <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!menuForm.valid">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Cancelar</button>
+  <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="menuForm.invalid">
     {{ editMode ? 'Actualizar' : 'Guardar' }}
   </button>
 </div>
