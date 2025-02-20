@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterMenuComponent } from '../register-menu/register-menu.component';
 import { MenuService } from '../../core/services/menu.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list-menu',
@@ -50,7 +51,7 @@ export default class ListMenuComponent implements OnInit {
     this.updatePage();
   }
 
-  editComida(comida: any) {
+  editPlato(comida: any) {
     const modalRef = this.modalService.open(RegisterMenuComponent, {
       size: 'lg',
       backdrop: 'static'
@@ -65,19 +66,40 @@ export default class ListMenuComponent implements OnInit {
     }, () => console.log('Modal cerrado'));
   }
 
-  deleteComida(id: number) {
-    if (confirm('¿Estás seguro de que deseas eliminar esta comida?')) {
-      this.menuService.eliminarMenu(id).subscribe(
-        () => {
-          console.log('Menú eliminado exitosamente');
-          this.obtenerMenus();
-        },
-        error => {
-          console.error('Error al eliminar el menú', error);
-        }
-      );
-    }
+  deletePlato(id: number) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.menuService.eliminarMenu(id).subscribe(
+          () => {
+            Swal.fire(
+              'Eliminado',
+              'El menú ha sido eliminado exitosamente.',
+              'success'
+            );
+            this.obtenerMenus();
+          },
+          error => {
+            Swal.fire(
+              'Error',
+              'Hubo un problema al eliminar el menú.',
+              'error'
+            );
+            console.error('Error al eliminar el menú', error);
+          }
+        );
+      }
+    });
   }
+  
 
   openRegisterModal() {
     const modalRef = this.modalService.open(RegisterMenuComponent, {

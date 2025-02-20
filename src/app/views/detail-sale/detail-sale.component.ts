@@ -12,8 +12,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class DetailSaleComponent implements OnInit {
 
-  @Input() id!: number; // ID de la venta
-  venta: any = null; // Datos de la venta
+  @Input() id!: number;
+  venta: any = null;
 
   constructor(
     public activeModal: NgbActiveModal,

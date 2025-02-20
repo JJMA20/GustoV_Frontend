@@ -1,4 +1,5 @@
 <div class="container">
+  <h2 class="my-4">Lista de Platos</h2>
   <div class="row mb-3">
     <div class="col">
       <button class="btn btn-primary" (click)="openRegisterModal()">
@@ -24,10 +25,10 @@
         <td>{{ comida.precio }}</td>
         <td>{{ comida.descripcion }}</td>
         <td>
-          <button class="btn btn-sm btn-info me-2" (click)="editComida(comida)">
+          <button class="btn btn-sm btn-info me-2" (click)="editPlato(comida)">
             Editar
           </button>
-          <button class="btn btn-sm btn-danger" (click)="deleteComida(comida.id)">
+          <button class="btn btn-sm btn-danger" (click)="deletePlato(comida.id)">
             Eliminar
           </button>
         </td>
