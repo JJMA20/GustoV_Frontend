@@ -19,6 +19,9 @@ export class SaleService {
   obtenerVentas(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
+  obtenerVentaById(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${id}`);
+  }
 
   registrarVenta(venta: Venta): Observable<any> {
     return this.http.post<any>(this.apiUrl, venta);

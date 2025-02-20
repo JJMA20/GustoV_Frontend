@@ -1,0 +1,38 @@
+<div class="modal-header">
+  <h4 class="modal-title">Detalle de Venta #{{ id }}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+  <div *ngIf="venta; else loading">
+    <p><strong>Método de Pago:</strong> {{ venta.metodoPago }}</p>
+    
+    <h5>Lista de Platos</h5>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Menú</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>SubTotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of venta.detalles">
+          <td>{{ item.menu.nombre }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>Bs {{ item.menu.precio }}</td>
+          <td>Bs {{ item.subtotal }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #loading>
+    <p class="text-center">Cargando detalles...</p>
+  </ng-template>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cerrar</button>
+</div>

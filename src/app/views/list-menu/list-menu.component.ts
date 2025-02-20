@@ -25,10 +25,10 @@ export default class ListMenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadMenus();
+    this.obtenerMenus();
   }
 
-  loadMenus() {
+  obtenerMenus() {
     this.menuService.obtenerMenus().subscribe(menus => {
       this.comidas = menus;
       this.totalPages = Math.ceil(this.comidas.length / this.pageSize);
@@ -60,7 +60,7 @@ export default class ListMenuComponent implements OnInit {
 
     modalRef.result.then((result) => {
       if (result) {
-        this.loadMenus();
+        this.obtenerMenus();
       }
     }, () => console.log('Modal cerrado'));
   }
@@ -70,7 +70,7 @@ export default class ListMenuComponent implements OnInit {
       this.menuService.eliminarMenu(id).subscribe(
         () => {
           console.log('Menú eliminado exitosamente');
-          this.loadMenus();
+          this.obtenerMenus();
         },
         error => {
           console.error('Error al eliminar el menú', error);
@@ -87,7 +87,7 @@ export default class ListMenuComponent implements OnInit {
 
     modalRef.result.then((result) => {
       if (result) {
-        this.loadMenus();
+        this.obtenerMenus();
       }
     }, () => console.log('Modal cerrado'));
   }

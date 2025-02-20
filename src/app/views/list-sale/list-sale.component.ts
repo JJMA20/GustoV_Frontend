@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { RegisterSaleComponent } from '../register-sale/register-sale.component';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SaleService } from '../../core/services/sale.service';
+import { DetailSaleComponent } from '../detail-sale/detail-sale.component';
 
 @Component({
   selector: 'app-list-sale',
@@ -26,10 +27,10 @@ export default class ListSaleComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.loadVentas();
+    this.obtenerVentas();
   }
 
-  loadVentas() {
+  obtenerVentas() {
     this.ventaService.obtenerVentas().subscribe(venta => {
       this.ventas = venta;
       this.totalPages = Math.ceil(this.ventas.length / this.pageSize);
@@ -56,12 +57,26 @@ export default class ListSaleComponent implements OnInit{
     modalRef.result.then(
       (result) => {
         if (result) {
-          this.loadVentas();
+          this.obtenerVentas();
           console.log('Venta Guardada:', result);
         }
       },
       () => {} 
     );
   }
+
+  openDetalleVentaModal(id: number) {
+    const modalRef = this.modalService.open(DetailSaleComponent, {
+      size: 'lg',
+      backdrop: 'static'
+    });
+  
+    if (modalRef.componentInstance) {
+      modalRef.componentInstance.id = id;
+    } else {
+      console.error('No se pudo asignar el ID al modal de detalle de venta.');
+    }
+  }
+  
 
 }
