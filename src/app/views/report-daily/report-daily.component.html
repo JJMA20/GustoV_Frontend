@@ -1,1 +1,40 @@
-<p>report-daily works!</p>
+<div class="container mt-4">
+    <h2>Reporte Diario de Ventas</h2>
+  
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <div class="form-group mb-0">
+        <label for="fecha" class="mb-1">Seleccionar Fecha:</label>
+        <input type="date" id="fecha" [(ngModel)]="fechaSeleccionada" class="form-control" />
+      </div>
+  
+      <button class="btn btn-primary mt-4" (click)="obtenerReporte()">Consultar Reporte</button>
+      <button class="btn btn-success mt-4" (click)="descargarExcel()" [disabled]="!reporte">Descargar Excel</button>
+    </div>
+  
+    <div *ngIf="mensajeError" class="alert alert-danger mt-3">
+      {{ mensajeError }}
+    </div>
+  
+    <div *ngIf="reporte" class="mt-4">
+      <h4>Fecha: {{ reporte.fecha | date:'yyyy-MM-dd' }}</h4>
+      <p><strong>Total Ventas:</strong> {{ reporte.totalVentas }}</p>
+      <p><strong>Total Ingresos:</strong> {{ reporte.totalIngresos | currency:'Bs.' }}</p>
+  
+      <h5>Platos Vendidos:</h5>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Plato</th>
+            <th>Cantidad Vendida</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let plato of reporte.platosVendidos">
+            <td>{{ plato.plato }}</td>
+            <td>{{ plato.cantidad }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
