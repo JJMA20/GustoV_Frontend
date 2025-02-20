@@ -1,0 +1,12 @@
+.pagination {
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .page-link {
+    cursor: pointer;
+  }
+  
+  .table {
+    margin-top: 20px;
+  }

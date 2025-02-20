@@ -1,1 +1,53 @@
-<p>list-sale works!</p>
+<div class="container">
+ <div class="row mb-3">
+   <div class="col">
+     <button class="btn btn-primary" (click)="openRegisterModal()">
+       Agregar
+     </button>
+   </div>
+ </div>
+
+ <table class="table">
+   <thead>
+     <tr>
+       <th>ID</th>
+       <th>Fecha</th>
+       <th>Tipo Pago</th>
+       <th>Total</th>
+       <th>Acciones</th>
+     </tr>
+   </thead>
+   <tbody>
+     <tr *ngFor="let venta of ventas">
+       <td>{{ venta.id }}</td>
+       <td>{{ venta.fecha | date:'yyyy-MM-dd' }}</td>
+       <td>{{ venta.metodoPago }}</td>
+       <td>{{ venta.total }}</td>
+       <td>
+         <button class="btn btn-sm btn-info me-2">
+           Editar
+         </button>
+         <!-- <button class="btn btn-sm btn-danger" (click)="deleteventa(venta.id)">
+           Eliminar
+         </button> -->
+       </td>
+     </tr>
+   </tbody>
+ </table>
+
+ <nav>
+   <ul class="pagination">
+     <li class="page-item" [class.disabled]="currentPage === 1">
+       <a class="page-link" (click)="changePage(currentPage - 1)">Anterior</a>
+     </li>
+     <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+         [class.active]="currentPage === i + 1">
+       <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+     </li>
+     <li class="page-item" [class.disabled]="currentPage === totalPages">
+       <a class="page-link" (click)="changePage(currentPage + 1)">Siguiente</a>
+     </li>
+   </ul>
+ </nav>
+</div>
+  

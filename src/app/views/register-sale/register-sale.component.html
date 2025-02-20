@@ -1,1 +1,90 @@
-<p>register-sale works!</p>
+<div class="modal-header">
+    <h4 class="modal-title">Registrar Venta</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+  </div>
+  
+  <div class="modal-body">
+    <!-- Selección de método de pago -->
+    <form [formGroup]="ventaForm">
+      <div class="mb-3">
+        <label for="metodoPago" class="form-label">Método de Pago</label>
+        <select class="form-control" id="metodoPago" formControlName="metodoPago">
+          <option value="qr">QR</option>
+          <option value="efectivo">Efectivo</option>
+          <option value="tarjeta">Tarjeta</option>
+        </select>
+      </div>
+    </form>
+  
+    <!-- Selección de menú y cantidad -->
+    <form [formGroup]="menuForm">
+      <div class="mb-3">
+        <label for="menu" class="form-label">Menú</label>
+        <select class="form-control" id="menu" formControlName="menu">
+          <option *ngFor="let menu of comidas" [value]="menu.id">
+            {{ menu.nombre }} - Bs {{ menu.precio }}
+          </option>
+        </select>
+      </div>
+<!--   
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-control" [value]="getSelectedMenu()?.nombre || ''" readonly>
+      </div>
+  
+      <div class="mb-3">
+        <label class="form-label">Precio</label>
+        <input type="number" class="form-control" [value]="getSelectedMenu()?.precio || 0" readonly>
+      </div> -->
+  
+      <div class="mb-3">
+        <label for="cantidad" class="form-label">Cantidad</label>
+        <input 
+          type="number" 
+          class="form-control" 
+          id="cantidad" 
+          formControlName="cantidad"
+          min="1"
+        >
+      </div>
+  
+      <button type="button" class="btn btn-success" (click)="agregarPedido()" [disabled]="menuForm.invalid">
+        Agregar Pedido
+      </button>
+    </form>
+  
+    <hr>
+  
+    <!-- Lista de pedidos -->
+    <h5>Pedidos Agregados</h5>
+    <table class="table table-bordered" *ngIf="pedidos.length > 0">
+      <thead>
+        <tr>
+          <th>Menú ID</th>
+          <th>Cantidad</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pedido of pedidos; let i = index">
+          <td>{{ pedido.menuId }}</td>
+          <td>{{ pedido.cantidad }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="eliminarPedido(i)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="pedidos.length > 0">
+      <h5 class="text-end">Total Venta: Bs {{ totalVenta }}</h5>
+    </div>
+  </div>
+  
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="guardarVenta()" [disabled]="pedidos.length === 0">
+      Guardar Venta
+    </button>
+  </div>
+  

@@ -7,17 +7,17 @@ import { MenuService } from '../../core/services/menu.service';
 @Component({
   selector: 'app-list-menu',
   standalone: true,
-  imports: [CommonModule, NgbModule], // Agregar HttpClientModule aquí
+  imports: [CommonModule, NgbModule],
   templateUrl: './list-menu.component.html',
   styleUrls: ['./list-menu.component.css']
 })
 export default class ListMenuComponent implements OnInit {
 
-  comidas: any[] = []; // Lista completa de comidas obtenidas del servicio
-  currentPage = 1; // Página actual
-  pageSize = 5; // Número de elementos por página
-  totalPages = 0; // Número total de páginas
-  paginatedComidas: any[] = []; // Lista de comidas para la página actual
+  comidas: any[] = [];
+  currentPage = 1;
+  pageSize = 5;
+  totalPages = 0;
+  paginatedComidas: any[] = [];
 
   constructor(
     private modalService: NgbModal, 
@@ -25,32 +25,29 @@ export default class ListMenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadMenus(); // Cargar los menús al inicio
+    this.loadMenus();
   }
 
   loadMenus() {
     this.menuService.obtenerMenus().subscribe(menus => {
-      this.comidas = menus; // Guardar la lista completa de comidas
-      this.totalPages = Math.ceil(this.comidas.length / this.pageSize); // Calcular el total de páginas
-      this.updatePage(); // Actualizar la página actual con la lista correcta
+      this.comidas = menus;
+      this.totalPages = Math.ceil(this.comidas.length / this.pageSize);
+      this.updatePage();
     }, error => {
       console.error('Error al obtener los menús', error);
     });
   }
 
   updatePage() {
-    // Calcular los índices de inicio y fin para la página actual
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    // Obtener las comidas de la página actual
     this.paginatedComidas = this.comidas.slice(startIndex, endIndex);
   }
 
   changePage(page: number) {
-    // Asegurarse de que la página esté dentro del rango válido
     if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page; // Establecer la página actual
-    this.updatePage(); // Actualizar los datos para la página actual
+    this.currentPage = page;
+    this.updatePage();
   }
 
   editComida(comida: any) {
@@ -63,7 +60,7 @@ export default class ListMenuComponent implements OnInit {
 
     modalRef.result.then((result) => {
       if (result) {
-        this.loadMenus(); // Recargar los menús al guardar cambios
+        this.loadMenus();
       }
     }, () => console.log('Modal cerrado'));
   }
@@ -73,7 +70,7 @@ export default class ListMenuComponent implements OnInit {
       this.menuService.eliminarMenu(id).subscribe(
         () => {
           console.log('Menú eliminado exitosamente');
-          this.loadMenus(); // Recargar la lista
+          this.loadMenus();
         },
         error => {
           console.error('Error al eliminar el menú', error);
@@ -90,7 +87,7 @@ export default class ListMenuComponent implements OnInit {
 
     modalRef.result.then((result) => {
       if (result) {
-        this.loadMenus(); // Recargar los menús al registrar uno nuevo
+        this.loadMenus();
       }
     }, () => console.log('Modal cerrado'));
   }
